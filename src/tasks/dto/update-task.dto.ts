@@ -1,4 +1,4 @@
-import { TaskStatus } from '../interfaces/task.interface'
+import { TaskStatus } from '../interfaces/task-status.enum'
 
 export class UpdateTaskDto {
     title: string
