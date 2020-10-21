@@ -27,6 +27,9 @@ export class UserRepository extends Repository<User> {
             throw new InternalServerErrorException()
         }
 
+        delete user.password
+        delete user.salt
+
         return user
     }
     async signIn(authCredentialsDto: AuthCredentialsDto): Promise<User> {
@@ -34,6 +37,9 @@ export class UserRepository extends Repository<User> {
 
         const user = await this.findOne({ username })
         if (user && (await user.validatePassword(password))) {
+            delete user.password
+            delete user.salt
+
             return user
         }
 
