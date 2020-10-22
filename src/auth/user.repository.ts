@@ -6,10 +6,12 @@ import {
     BadRequestException,
     ConflictException,
     InternalServerErrorException,
+    Logger,
 } from '@nestjs/common'
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+    private logger = new Logger('TaskController')
     private static async hashPassword(password: string, salt: string): Promise<string> {
         return bcrypt.hash(password, salt)
     }
@@ -23,6 +25,7 @@ export class UserRepository extends Repository<User> {
         try {
             await user.save()
         } catch (e) {
+            this.logger.error(`Username ${username} is already taken`)
             if (e.code === '23505') throw new ConflictException('Username taken')
             throw new InternalServerErrorException()
         }
